@@ -30,7 +30,7 @@ class MarioController(MarioEnvironment):
     def __init__(
         self,
         act_freq: int = 10,
-        emulation_speed: int = 0,
+        emulation_speed: int = 1,
         headless: bool = False,
     ) -> None:
         super().__init__(
@@ -105,7 +105,7 @@ class MarioExpert:
         state = self.environment.game_state()
         frame = self.environment.grab_frame()
         game_area = self.environment.game_area()
-
+        print(f"State: {state}")
         # Implement your code here to choose the best action
         # time.sleep(0.1)
         return random.randint(0, len(self.environment.valid_actions) - 1)

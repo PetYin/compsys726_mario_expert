@@ -19,12 +19,13 @@ def get_args():
 
     parse_args.add_argument("--headless", action="store_true")
 
-    parse_args.add_argument("--upi", type=str, required=True)
+    #parse_args.add_argument("--upi", type=str, required=True)
 
     return parse_args.parse_args()
 
 
 def run(upi, headless):
+
     if upi == "your_upi":
         raise ValueError("Please set your UPI in the run.py file")
 
@@ -40,8 +41,8 @@ def run(upi, headless):
 
 def main():
     args = get_args()
-
-    run(args.upi, args.headless)
+    upi = "byin236"
+    run(upi, args.headless)
 
 
 if __name__ == "__main__":
