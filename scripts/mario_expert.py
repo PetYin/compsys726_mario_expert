@@ -75,6 +75,7 @@ class MarioController(MarioEnvironment):
         # Simply toggles the buttons being on or off for a duration of act_freq
         self.pyboy.send_input(self.valid_actions[action])
 
+        # This is the frequency at which the actions are performed according to the act_freq
         for _ in range(self.act_freq):
             self.pyboy.tick()
 
@@ -106,8 +107,11 @@ class MarioExpert:
         frame = self.environment.grab_frame()
         game_area = self.environment.game_area()
         print(f"State: {state}")
+        print(f"Frame: {frame}")
+        print(f"Game Area: {game_area}")
         # Implement your code here to choose the best action
         # time.sleep(0.1)
+        
         return random.randint(0, len(self.environment.valid_actions) - 1)
 
     def step(self):
