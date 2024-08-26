@@ -9,6 +9,7 @@ Original Mario Manual: https://www.thegameisafootarcade.com/wp-content/uploads/2
 import json
 import logging
 import random
+import numpy as np
 
 import cv2
 from mario_environment import MarioEnvironment
@@ -111,7 +112,23 @@ class MarioExpert:
         print(f"Game Area: {game_area}")
         # Implement your code here to choose the best action
         # time.sleep(0.1)
-        
+        xPosition = state["x_pos"]
+        # Extracting the coordinates of non-zero objects along with their values
+        non_zero_coords = np.argwhere(game_area > 0)
+        # Find Mario's position (where value is 1)
+        mario_coords = np.argwhere(game_area == 1)
+
+        # If multiple positions are found, select one (e.g., the first one)
+        if mario_coords.size > 0:
+            mario_x, mario_y = mario_coords[0][1], mario_coords[0][0]
+            print(f"Mario's position: x = {mario_x}, y = {mario_y}")
+        else:
+            print("Mario's position not found.")
+        # Display the coordinates and corresponding values
+        for coord in non_zero_coords:
+            x, y = coord[1], coord[0]
+            value = game_area[y, x]
+            print(f"Object with value {value} found at x: {x}, y: {y}")
         return random.randint(0, len(self.environment.valid_actions) - 1)
 
     def step(self):
