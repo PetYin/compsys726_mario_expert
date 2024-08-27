@@ -112,24 +112,44 @@ class MarioExpert:
         print(f"Game Area: {game_area}")
         # Implement your code here to choose the best action
         # time.sleep(0.1)
-        xPosition = state["x_pos"]
-        # Extracting the coordinates of non-zero objects along with their values
-        non_zero_coords = np.argwhere(game_area > 0)
-        # Find Mario's position (where value is 1)
-        mario_coords = np.argwhere(game_area == 1)
+        action = 2 # Example action
+        
+        # Read Mario Location
+        marioX = 0
+        marioY = 0
+        print(f"Game Area Shape: {game_area.shape}")
+        # Iterate through the array and update the leftmost and bottommost coordinates
+        for x in range(game_area.shape[0]):
+            for y in range(game_area.shape[1]):
+                if game_area[x,y] == 1:  # Mario
+                    marioX = x
+                    marioY = y
+        print(f"Mario Location: ({marioX}, {marioY})")
 
-        # If multiple positions are found, select one (e.g., the first one)
-        if mario_coords.size > 0:
-            mario_x, mario_y = mario_coords[0][1], mario_coords[0][0]
-            print(f"Mario's position: x = {mario_x}, y = {mario_y}")
+        # #Check if the Mario is under the block of value 13 or not within 2 units
+        # if ((game_area[marioX-3, marioY] == 13)or(game_area[marioX-2, marioY] == 13)or(game_area[marioX-4, marioY] == 13) ):
+        #     # if yes then jump
+        #     action = 4
+        #     print("Jumping for coin")
+        #Check if a monster is approaching Mario
+        if (game_area[marioX, marioY+2] == 15 or game_area[marioX, marioY+1] == 15):
+            # if yes then jump
+            action = 4
+            print("Jumping for monster")
+        #Check if Mario is blocked by a tube or not
+        elif (game_area[marioX, marioY+2] == 14):
+            # if yes then jump
+            action = 4
+            print("Jumping for tube")
+        #Check if Mario is blocked by a wall or not
+        elif (game_area[marioX, marioY+2] == 10):
+            # if yes then jump
+            action = 4
+            print("Jumping for wall")
         else:
-            print("Mario's position not found.")
-        # Display the coordinates and corresponding values
-        for coord in non_zero_coords:
-            x, y = coord[1], coord[0]
-            value = game_area[y, x]
-            print(f"Object with value {value} found at x: {x}, y: {y}")
-        return random.randint(0, len(self.environment.valid_actions) - 1)
+            action = 2
+
+        return action
 
     def step(self):
         """
