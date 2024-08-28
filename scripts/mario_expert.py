@@ -16,6 +16,8 @@ import cv2
 from mario_environment import MarioEnvironment
 from pyboy.utils import WindowEvent
 
+
+
 # Function to check if there is a non-zero value in front of a 1
 def check_monsters(game_area):
     for i in range(game_area.shape[0]):  # Iterate over rows
@@ -146,7 +148,7 @@ class MarioExpert:
         self.results_path = results_path
 
         self.environment = MarioController(headless=headless)
-
+        self.flag1 = False
         self.video = None
 
     def choose_action(self):
@@ -276,7 +278,7 @@ class MarioExpert:
                 # if yes then jump
                 action = 4
                 print("Jumping for tube")
-        elif state['x_position'] < 1000:
+        elif state['x_position'] < 900:
             #Check if Mario is blocked by a plate or not
             if (game_area[marioX-1, marioY+2] == 12):
                 # if yes then jump
@@ -286,15 +288,26 @@ class MarioExpert:
                 # if yes then jump
                 action = 4
                 print("Jumping for plate")
+            # Check if the next one is 12 followed by 0
+            elif (game_area[marioX+1, marioY+1] == 12 and game_area[marioX+1, marioY+2] == 0):
+                # if yes then jump
+                action = 4
+                print("Jumping for plate")
             # Check if all area under is 0 or not
-            elif (game_area[marioX+1, marioY+1] == 0 or game_area[marioX+1, marioY] == 0 or game_area[marioX+1, marioY-1] == 0):
+            elif (game_area[15, marioY+3] == 0 or game_area[15, marioY+4] == 0):
                 # if yes then hold
                 action = 3
                 print("Holding for hole")
+            # Check if all area under is 0 or not
+            elif (game_area[15, marioY+2] == 0 or game_area[15, marioY+3] == 0):
+                # if yes then hold
+                action = 1
+                print("left for hole")
             else:
                 action = 2
                 print("Moving forward")
-
+        elif state['x_position'] < 1000:
+            
         else:
             action = 3
             print("Holding")
