@@ -578,8 +578,20 @@ class MarioExpert:
             action = 2
         else:
             action = 3
-            print("Holding")
-            
+
+        if state['stage'] == 2:
+            if (280>=state['x_position'] >= 270):
+                # if yes then hold
+                action = 4
+            elif (340>=state['x_position'] >= 330):
+                # if yes then hold
+                action = 4
+            elif (450>=state['x_position'] >= 440):
+                # if yes then hold
+                action = 4
+            else :
+                action = 2
+        
         return action
 
     def step(self):
