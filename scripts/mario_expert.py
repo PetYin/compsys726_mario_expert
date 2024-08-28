@@ -186,8 +186,9 @@ class MarioExpert:
                     marioY = y
         print(f"Mario Location: ({marioX}, {marioY})")
 
+       
         # Check if the x position of game is less than 600
-        if state['x_position'] < 650:
+        if state['x_position'] < 650 and state['stage'] == 1:
             #Check if a monster is approaching Mario
             if (game_area[marioX, marioY+3] == 15 or game_area[marioX, marioY+4] == 15 or game_area[marioX, marioY+5] == 15 or game_area[marioX, marioY+6] == 15):
                 # if true then hold
@@ -228,7 +229,7 @@ class MarioExpert:
             else:
                 action = 2
                 print("Moving forward")
-        elif state['x_position'] < 750:
+        elif state['x_position'] < 750 and state['stage'] == 1:
             #Check if a monster is approaching Mario
             if (game_area[marioX, marioY+3] == 15 or game_area[marioX, marioY+4] == 15 or game_area[marioX, marioY+5] == 15 or game_area[marioX, marioY+6] == 15):
                 # if true then hold
@@ -252,7 +253,7 @@ class MarioExpert:
                 # if yes then jump
                 action = 4
                 print("Jumping for wall")
-        elif state['x_position'] < 830:
+        elif state['x_position'] < 830 and state['stage'] == 1:
             #Check if a monster is approaching Mario
             if (game_area[marioX, marioY+3] == 15 or game_area[marioX, marioY+4] == 15 or game_area[marioX, marioY+5] == 15 or game_area[marioX, marioY+6] == 15):
                 # if true then hold
@@ -290,7 +291,7 @@ class MarioExpert:
                 # if yes then jump
                 action = 4
                 print("Jumping for tube")
-        elif state['x_position'] < 920 and state['score'] < 2850:
+        elif state['x_position'] < 920 and state['score'] < 2850  and state['stage'] == 1:
             #Check if Mario is blocked by a plate or not
             if (game_area[marioX-1, marioY+2] == 12):
                 # if yes then jump
@@ -327,7 +328,7 @@ class MarioExpert:
             else:
                 action = 2
                 print("Moving forward")
-        elif state['x_position'] < 980:
+        elif state['x_position'] < 980 and state['stage'] == 1:
             if (game_area[15, marioY+1] == 0 or game_area[15, marioY+2] == 0):
                 # if yes then hold
                 action = 4
@@ -335,7 +336,7 @@ class MarioExpert:
             else:
                 action = 2
                 print("Moving forward")
-        elif state['x_position'] < 1100:
+        elif state['x_position'] < 1100 and state['stage'] == 1:
             #Check if Mario is blocked by a tube or not
             if (game_area[marioX, marioY+2] == 14):
                 # if yes then jump
@@ -364,7 +365,7 @@ class MarioExpert:
         #     else:
         #         action = 2
         #         print("Moving forward")
-        elif state['x_position'] < 1400:
+        elif state['x_position'] < 1400 and state['stage'] == 1:
             if (game_area[15, marioY+1] == 0 or game_area[15, marioY] == 0):
                 # if yes then hold
                 action = 4
@@ -400,7 +401,7 @@ class MarioExpert:
             elif ((game_area[marioX-3, marioY+1] == 13)or(game_area[marioX-2, marioY+1] == 13)or(game_area[marioX-4, marioY+1] == 13) or(game_area[marioX-5, marioY+1] == 13)):
                 action = 4
                 print("Jumping for coin")
-        elif state['x_position'] < 1450:
+        elif state['x_position'] < 1450 and state['stage'] == 1:
             if (game_area[marioX, marioY+3] == 15 or game_area[marioX, marioY+4] == 15 or game_area[marioX, marioY+5] == 15 or game_area[marioX, marioY+6] == 15):
                 # if true then hold
                 action = 3
@@ -425,7 +426,7 @@ class MarioExpert:
             else:
                 action = 2
                 print("Moving forward")
-        elif state['x_position'] < 1500:
+        elif state['x_position'] < 1500 and state['stage'] == 1:
             if (game_area[marioX, marioY+3] == 18 or game_area[marioX, marioY+4] == 18 or game_area[marioX, marioY+5] == 18 or game_area[marioX, marioY+6] == 18):
                 # if true then hold
                 action = 3
@@ -450,7 +451,7 @@ class MarioExpert:
             else:
                 action = 2
                 print("Moving forward")
-        elif state['x_position'] < 1615:
+        elif state['x_position'] < 1615 and state['stage'] == 1:
              #Check if Mario is blocked by a tube or not
             if (game_area[marioX, marioY+2] == 14):
                 # if yes then jump
@@ -463,7 +464,7 @@ class MarioExpert:
             else:
                 action = 2
                 print("Moving forward")
-        elif state['x_position'] < 1650:
+        elif state['x_position'] < 1650 and state['stage'] == 1:
             #Check if a monster is approaching Mario
             if (game_area[marioX, marioY+3] == 15 or game_area[marioX, marioY+4] == 15 or game_area[marioX, marioY+5] == 15 or game_area[marioX, marioY+6] == 15):
                 # if true then hold
@@ -494,7 +495,7 @@ class MarioExpert:
             else:
                 action = 2
                 print("Moving forward")
-        elif state['x_position'] < 1870:
+        elif state['x_position'] < 1870 and state['stage'] == 1:
             #Check if a monster is approaching Mario
             if (game_area[marioX, marioY+3] == 15 or game_area[marioX, marioY+4] == 15 or game_area[marioX, marioY+5] == 15 or game_area[marioX, marioY+6] == 15):
                 # if true then hold
@@ -516,7 +517,7 @@ class MarioExpert:
                 action = 4
             else:
                 action = 2
-        elif state['x_position'] < 2000 and state['time'] <= 381:
+        elif state['x_position'] < 2000 and state['time'] <= 381 and state['stage'] == 1:
             if (game_area[marioX+1, marioY] == 14 or game_area[marioX+1, marioY-1] == 14):
                 # if yes then hold
                 action = 4
@@ -528,7 +529,7 @@ class MarioExpert:
                 action = 4
             else:
                 action = 2
-        elif 2000<state['x_position'] < 2100:
+        elif 2000<state['x_position'] < 2100 and state['stage'] == 1:
             if (game_area[marioX, marioY+3] == 18 or game_area[marioX, marioY+4] == 18 or game_area[marioX, marioY+5] == 18 or game_area[marioX, marioY+6] == 18):
                 # if true then hold
                 action = 3
@@ -540,7 +541,7 @@ class MarioExpert:
                 action = 3
             else :
                 action = 2
-        elif 2100<state['x_position'] < 2150 and state['time'] <= 372:
+        elif 2100<state['x_position'] < 2150 and state['time'] <= 372 and state['stage'] == 1:
             if (game_area[marioX, marioY+3] == 18 or game_area[marioX, marioY+4] == 18 or game_area[marioX, marioY+5] == 18 or game_area[marioX, marioY+6] == 18):
                 # if true then hold
                 action = 3
@@ -552,7 +553,7 @@ class MarioExpert:
                 action = 3
             else :
                 action = 2
-        elif 2150<state['x_position'] < 2250:
+        elif 2150<state['x_position'] < 2250 and state['stage'] == 1:
             if (game_area[15, marioY+1] == 0):
                 # if yes then hold
                 action = 4
@@ -561,7 +562,7 @@ class MarioExpert:
                 action = 4
             else :
                 action = 2
-        elif 2250<state['x_position'] < 2500:
+        elif 2250<state['x_position'] < 2500 and state['stage'] == 1:
             if (game_area[15, marioY+1] == 0 or game_area[15, marioY] == 0):
                 # if yes then hold
                 action = 4
@@ -573,11 +574,12 @@ class MarioExpert:
                 action = 4
             else:
                 action = 2
+        elif 2500<state['x_position'] < 2600 and state['stage'] == 1:
+            action = 2
         else:
             action = 3
             print("Holding")
-        
-
+            
         return action
 
     def step(self):
