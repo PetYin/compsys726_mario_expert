@@ -10,11 +10,57 @@ import json
 import logging
 import random
 import numpy as np
+import time
 
 import cv2
 from mario_environment import MarioEnvironment
 from pyboy.utils import WindowEvent
 
+# Function to check if there is a non-zero value in front of a 1
+def check_monsters(game_area):
+    for i in range(game_area.shape[0]):  # Iterate over rows
+        for j in range(1, game_area.shape[1]):  # Start from the second column
+            if game_area[i, j] == 1 and game_area[i, j-1] != 0:
+                return True
+    return False
+
+# Function to search the area around a specific coordinate (i, j)
+def search_coordinate(game_area, coord, radius, target_value):
+    i, j = coord
+    found_positions = []
+    # Define the range for the neighborhood
+    for x in range(max(0, i - radius), min(game_area.shape[0], i + radius + 1)):
+        for y in range(max(0, j - radius), min(game_area.shape[1], j + radius + 1)):
+            if game_area[x, y] == target_value:
+                found_positions= [x, y]
+    
+    return found_positions
+# Function to search the area below a specific coordinate (i, j)
+def cordBelow(game_area, coord, target_value):
+    i, j = coord
+    found_positions = False
+    
+    # Define the range for the search below the coordinate
+    for x in range(i + 1, game_area.shape[0]):
+        if game_area[x, j] == target_value:
+            found_positions = True
+            break
+    
+    return found_positions
+
+# Function to search the area below a specific coordinate (i, j)
+def cordAbove(game_area, coord, target_value):
+    i, j = coord
+    found_positions = False
+    
+    # Define the range for the search below the coordinate
+    for x in range(i - 1, 0, -1):  # Move upwards from the coordinate
+        for y in range(j + 1, game_area.shape[1]-1, +1):  # Move upwards from the coordinate
+            if game_area[x, y] == target_value:
+                found_positions = True
+                break
+    
+    return found_positions
 
 class MarioController(MarioEnvironment):
     """
@@ -31,7 +77,7 @@ class MarioController(MarioEnvironment):
     def __init__(
         self,
         act_freq: int = 10,
-        emulation_speed: int = 1,
+        emulation_speed: int = 5,
         headless: bool = False,
     ) -> None:
         super().__init__(
@@ -126,28 +172,132 @@ class MarioExpert:
                     marioY = y
         print(f"Mario Location: ({marioX}, {marioY})")
 
-        # #Check if the Mario is under the block of value 13 or not within 2 units
-        # if ((game_area[marioX-3, marioY] == 13)or(game_area[marioX-2, marioY] == 13)or(game_area[marioX-4, marioY] == 13) ):
-        #     # if yes then jump
-        #     action = 4
-        #     print("Jumping for coin")
-        #Check if a monster is approaching Mario
-        if (game_area[marioX, marioY+2] == 15 or game_area[marioX, marioY+1] == 15):
-            # if yes then jump
-            action = 4
-            print("Jumping for monster")
-        #Check if Mario is blocked by a tube or not
-        elif (game_area[marioX, marioY+2] == 14):
-            # if yes then jump
-            action = 4
-            print("Jumping for tube")
-        #Check if Mario is blocked by a wall or not
-        elif (game_area[marioX, marioY+2] == 10):
-            # if yes then jump
-            action = 4
-            print("Jumping for wall")
+        # Check if the x position of game is less than 600
+        if state['x_position'] < 650:
+            #Check if a monster is approaching Mario
+            if (game_area[marioX, marioY+3] == 15 or game_area[marioX, marioY+4] == 15 or game_area[marioX, marioY+5] == 15 or game_area[marioX, marioY+6] == 15):
+                # if true then hold
+                action = 3
+                print("Holding for monster")
+            elif (game_area[marioX, marioY+2] == 15 or game_area[marioX, marioY+1] == 15):
+                # if yes then jump
+                action = 4
+                print("Jumping for monster")
+            elif (cordBelow(game_area, [marioX, marioY+1], 15) or cordBelow(game_area, [marioX, marioY], 15) or cordBelow(game_area, [marioX, marioY-1], 15)):
+                # if true then hold
+                action = 3
+                print("Holding for monster")
+            # Search for the treasure
+            elif (search_coordinate(game_area, [marioX, marioY], 10, 6)!=[]):
+                # if true then hold
+                action = 3
+                print("Holding for monster")
+            #Check if there is a block of 13 is above and behind or not
+            elif ((game_area[marioX-3, marioY-1] == 13)or(game_area[marioX-2, marioY-1] == 13)or(game_area[marioX-4, marioY-1] == 13)):
+                # if yes then go left
+                action = 1
+                print("Left for coin")
+            #Check if the Mario is under the block of value 13 or not within 2 units
+            elif ((game_area[marioX-3, marioY+1] == 13)or(game_area[marioX-2, marioY+1] == 13)or(game_area[marioX-4, marioY+1] == 13) or(game_area[marioX-5, marioY+1] == 13)):
+                action = 4
+                print("Jumping for coin")
+            #Check if Mario is blocked by a tube or not
+            elif (game_area[marioX, marioY+2] == 14):
+                # if yes then jump
+                action = 4
+                print("Jumping for tube")
+            #Check if Mario is blocked by a wall or not
+            elif (game_area[marioX, marioY+2] == 10):
+                # if yes then jump
+                action = 4
+                print("Jumping for wall")
+            else:
+                action = 2
+                print("Moving forward")
+        elif state['x_position'] < 750:
+            #Check if a monster is approaching Mario
+            if (game_area[marioX, marioY+3] == 15 or game_area[marioX, marioY+4] == 15 or game_area[marioX, marioY+5] == 15 or game_area[marioX, marioY+6] == 15):
+                # if true then hold
+                action = 3
+                print("Holding for monster")
+            elif (game_area[marioX, marioY+2] == 15 or game_area[marioX, marioY+1] == 15):
+                # if yes then jump
+                action = 4
+                print("Jumping for monster")
+            elif (cordBelow(game_area, [marioX, marioY+1], 15) or cordBelow(game_area, [marioX, marioY], 15) or cordBelow(game_area, [marioX, marioY-1], 15)):
+                # if true then hold
+                action = 3
+                print("Holding for monster")
+            # Search for future monsters
+            elif (cordAbove(game_area, [marioX, marioY], 15)):
+                # if true then hold
+                action = 3
+                print("Holding for monster")
+            #Check if Mario is blocked by a wall or not
+            elif (game_area[marioX, marioY+2] == 10):
+                # if yes then jump
+                action = 4
+                print("Jumping for wall")
+        elif state['x_position'] < 830:
+            #Check if a monster is approaching Mario
+            if (game_area[marioX, marioY+3] == 15 or game_area[marioX, marioY+4] == 15 or game_area[marioX, marioY+5] == 15 or game_area[marioX, marioY+6] == 15):
+                # if true then hold
+                action = 3
+                print("Holding for monster")
+            elif (game_area[marioX, marioY+2] == 15 or game_area[marioX, marioY+1] == 15):
+                # if yes then jump
+                action = 4
+                print("Jumping for monster")
+            elif (cordBelow(game_area, [marioX, marioY+1], 15) or cordBelow(game_area, [marioX, marioY], 15) or cordBelow(game_area, [marioX, marioY-1], 15)):
+                # if true then hold
+                action = 3
+                print("Holding for monster")
+            #Check if there is a block of 13 is above and behind or not
+            elif ((game_area[marioX-3, marioY-1] == 13)or(game_area[marioX-2, marioY-1] == 13)or(game_area[marioX-4, marioY-1] == 13)):
+                # if yes then go left
+                action = 1
+                print("Left for coin")
+            #Check if the Mario is under the block of value 13 or not within 2 units
+            elif ((game_area[marioX-3, marioY+1] == 13)or(game_area[marioX-2, marioY+1] == 13)or(game_area[marioX-4, marioY+1] == 13) or(game_area[marioX-5, marioY+1] == 13)):
+                action = 4
+                print("Jumping for coin")
+            # Search for future monsters
+            elif (cordAbove(game_area, [marioX, marioY], 15)):
+                # if true then hold
+                action = 3
+                print("Holding for monster")
+            #Check if Mario is blocked by a wall or not
+            elif (game_area[marioX, marioY+2] == 10):
+                # if yes then jump
+                action = 4
+                print("Jumping for wall")
+            #Check if Mario is blocked by a tube or not
+            elif (game_area[marioX, marioY+2] == 14):
+                # if yes then jump
+                action = 4
+                print("Jumping for tube")
+        elif state['x_position'] < 1000:
+            #Check if Mario is blocked by a plate or not
+            if (game_area[marioX-1, marioY+2] == 12):
+                # if yes then jump
+                action = 4
+                print("Jumping for plate")
+            elif (game_area[marioX-1, marioY+2] == 13):
+                # if yes then jump
+                action = 4
+                print("Jumping for plate")
+            # Check if all area under is 0 or not
+            elif (game_area[marioX+1, marioY+1] == 0 or game_area[marioX+1, marioY] == 0 or game_area[marioX+1, marioY-1] == 0):
+                # if yes then hold
+                action = 3
+                print("Holding for hole")
+            else:
+                action = 2
+                print("Moving forward")
+
         else:
-            action = 2
+            action = 3
+            print("Holding")
 
         return action
 
