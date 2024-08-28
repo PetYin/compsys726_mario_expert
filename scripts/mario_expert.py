@@ -552,18 +552,26 @@ class MarioExpert:
                 action = 3
             else :
                 action = 2
-        elif 2150<state['x_position'] < 2500:
+        elif 2150<state['x_position'] < 2250:
+            if (game_area[15, marioY+1] == 0):
+                # if yes then hold
+                action = 4
+            elif (game_area[marioX, marioY+2] == 10 or game_area[marioX, marioY+1] == 10):
+                # if yes then jump
+                action = 4
+            else :
+                action = 2
+        elif 2250<state['x_position'] < 2500:
             if (game_area[15, marioY+1] == 0 or game_area[15, marioY] == 0):
                 # if yes then hold
                 action = 4
-                print("Jumping for hole")
-            elif (game_area[marioX, marioY+2] == 18 or game_area[marioX, marioY+1] == 18):
+            elif (game_area[marioX, marioY+2] == 10 or game_area[marioX, marioY+1] == 10):
                 # if yes then jump
                 action = 4
-            elif (cordBelow(game_area, [marioX, marioY+1], 18) or cordBelow(game_area, [marioX, marioY], 18) or cordBelow(game_area, [marioX, marioY-1], 18)):
-                # if true then hold
-                action = 3
-            else :
+            elif (game_area[marioX-1, marioY+2] == 10 or game_area[marioX-1, marioY+1] == 10):
+                # if yes then jump
+                action = 4
+            else:
                 action = 2
         else:
             action = 3
