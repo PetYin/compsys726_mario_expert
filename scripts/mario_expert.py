@@ -91,7 +91,7 @@ class MarioController(MarioEnvironment):
     def __init__(
         self,
         act_freq: int = 10,
-        emulation_speed: int = 5,
+        emulation_speed: int = 1,
         headless: bool = False,
     ) -> None:
         super().__init__(
@@ -452,15 +452,20 @@ class MarioExpert:
                 action = 2
                 print("Moving forward")
         elif state['x_position'] < 1615 and state['stage'] == 1:
+
              #Check if Mario is blocked by a tube or not
             if (game_area[marioX, marioY+2] == 14):
                 # if yes then jump
                 action = 4
                 print("Jumping for tube")
-            elif (game_area[marioX, marioY+2] == 10):
+            elif (game_area[marioX, marioY+1] == 10):
                 # if yes then jump
                 action = 4
                 print("Jumping for tube")
+            elif (state['time'] > 318):
+                # if yes then hold
+                action = 3
+                print("Jumping for hole")
             else:
                 action = 2
                 print("Moving forward")
@@ -517,7 +522,19 @@ class MarioExpert:
                 action = 4
             else:
                 action = 2
-        elif state['x_position'] < 2000 and state['time'] <= 381 and state['stage'] == 1:
+        elif state['x_position'] < 2000 and 280 <= state['time'] <= 295 and state['stage'] == 1:
+            if (game_area[marioX+1, marioY] == 14 or game_area[marioX+1, marioY-1] == 14):
+                # if yes then hold
+                action = 4
+            elif (game_area[marioX, marioY+1] == 10 or game_area[marioX, marioY+2] == 10):
+                # if yes then hold
+                action = 4
+            elif (game_area[marioX, marioY+2] == 14):
+                # if yes then jump
+                action = 4
+            else:
+                action = 2
+        elif state['x_position'] < 2000 and state['time'] <= 290 and state['stage'] == 1:
             if (game_area[marioX+1, marioY] == 14 or game_area[marioX+1, marioY-1] == 14):
                 # if yes then hold
                 action = 4
@@ -541,7 +558,7 @@ class MarioExpert:
                 action = 3
             else :
                 action = 2
-        elif 2100<state['x_position'] < 2150 and state['time'] <= 372 and state['stage'] == 1:
+        elif 2100<state['x_position'] < 2150 and state['time'] <= 285 and state['stage'] == 1:
             if (game_area[marioX, marioY+3] == 18 or game_area[marioX, marioY+4] == 18 or game_area[marioX, marioY+5] == 18 or game_area[marioX, marioY+6] == 18):
                 # if true then hold
                 action = 3
@@ -588,6 +605,31 @@ class MarioExpert:
                 action = 4
             elif (450>=state['x_position'] >= 440):
                 # if yes then hold
+                action = 4
+            elif (480 >= state['x_position'] >= 450):
+                #Check if a monster is approaching Mario
+                if (game_area[marioX, marioY+3] == 15 or game_area[marioX, marioY+4] == 15 or game_area[marioX, marioY+5] == 15 or game_area[marioX, marioY+6] == 15):
+                    # if true then hold
+                    action = 3
+                    print("Holding for monster")
+                elif (game_area[marioX, marioY+2] == 15 or game_area[marioX, marioY+1] == 15):
+                    # if yes then jump
+                    action = 4
+                    print("Jumping for monster")
+                elif (cordBelow(game_area, [marioX, marioY+1], 15) or cordBelow(game_area, [marioX, marioY], 15) or cordBelow(game_area, [marioX, marioY-1], 15)):
+                    # if true then hold
+                    action = 3
+                    print("Holding for monster")
+                # Search for the treasure
+                elif (search_coordinate(game_area, [marioX, marioY], 10, 6)!=[]):
+                    # if true then hold
+                    action = 3
+                    print("Holding for monster")
+            # elif (520 >=state['x_position'] >= 510):
+            #     # if yes then jump
+            #     action = 4
+            elif (game_area[marioX-2, marioY] == 10 or game_area[marioX-1, marioY] == 10 or game_area[marioX-3, marioY] == 10):
+                # if yes then jump
                 action = 4
             else :
                 action = 2
